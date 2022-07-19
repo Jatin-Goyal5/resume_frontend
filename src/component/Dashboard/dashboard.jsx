@@ -4,7 +4,6 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import ListAltIcon from '@material-ui/icons/ListAlt';
-import './dashboard.css';
 import Skills from '../Dashboard/skills/skills';
 import Project from './Project/projects';
 import Report from './report';
@@ -51,9 +50,9 @@ useEffect(()=>{
     console.log(currentUser);
 }, [selected])
 
-  return <Grid container spacing={2}>
-       <Grid item xs={8}>
-            <List className='litem_list'>
+  return <Grid container >
+       <Grid item xs={3}>
+            <List>
                 { item.map((data, index) => {
                     return (<div onClick={()=>{changeSelect(index)}} key={index}>
                     <ListItem key={index}  button selected= {index== selected? true:false}>
@@ -66,7 +65,7 @@ useEffect(()=>{
                 })}
             </List>
        </Grid>
-       <Grid item xs={8}>
+       <Grid item xs={9}>
             {item[selected].component}
        </Grid>
     </Grid>

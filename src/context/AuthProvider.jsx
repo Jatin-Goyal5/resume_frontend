@@ -46,7 +46,7 @@ export function AuthProvider ({children}){
 
     async function addProject(title , description, skills){
         try{
-            let response = await axios.post("http://localhost:5000/project",{title:title, description: description, skils: skills},
+            let response = await axios.post("http://localhost:5000/project",{title:title, description: description, skills: skills},
             {
                 headers: {
                 'Content-Type': 'application/json',
@@ -74,6 +74,21 @@ export function AuthProvider ({children}){
             console.log(err);
         }
     }
+
+    async function getProjects(){
+        try{
+            let response = await axios.get("http://localhost:5000/project",{
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': currentUser.data.token,
+                }
+            });
+            console.log(response);
+            return response.data.data;
+        }catch(err){
+            console.log(err);
+        }
+    }
     
     useEffect(()=>{
         console.log(currentUser);
@@ -87,6 +102,7 @@ export function AuthProvider ({children}){
         addSkill: addSkill,
         addProject: addProject,
         getSkills: getSkills,
+        getProjects:getProjects,
     }
 
     return (<AuthContext.Provider value={values}>

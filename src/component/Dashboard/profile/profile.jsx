@@ -1,18 +1,37 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useContext, useState } from 'react'
 import Avatar from '@mui/material/Avatar';
-import { blue } from '@material-ui/core/colors';
-import { OutlinedInput, TextareaAutosize, TextField, Typography } from '@material-ui/core';
+import { Button, IconButton, OutlinedInput, TextareaAutosize, TextField, Typography } from '@material-ui/core';
+import EditIcon from '@mui/icons-material/Edit';
 import './profile.css';
+import { AuthContext } from '../../../context/AuthProvider';
+import { Edit } from '@material-ui/icons';
 export default function Profile(){
     const [email , setEmail] = useState('');
     const [contact , setContact] = useState('');
+    const [about, setAbout] = useState('');
+    const {updateUser} = useContext(AuthContext);
+    const handleSaveUser = async ()=>{
+        try{
+            let obj = {
+                email: email,
+                contact: contact,
+                about: about,
+            }
+            await updateUser();
+        }catch(err){
+            console.log(err);
+        }
+    }
     return <div class="profilee">
         <div className= "profile">
             <Avatar sx={{ width: 100, height: 100 }}>N</Avatar>
-            <div className="name">
+            <div>
                 <Typography>name</Typography>
                 <Typography>location</Typography>
             </div>
+            <IconButton color="primary" onClick={{}}>
+                <EditIcon></EditIcon>
+            </IconButton>
         </div>
         <div class ="detail">
         <div>
@@ -50,13 +69,16 @@ export default function Profile(){
         <div>
             <Typography>About Me</Typography>
             <TextareaAutosize
-            aria-label="empty textarea"
-            minRows={10}
-            maxRows={10}
-            placeholder="Empty"
-            style={{ width: "100%" }}
+                aria-label="empty textarea"
+                minRows={10}
+                maxRows={10}
+                placeholder="Empty"
+                style={{ width: "100%" }}
+                value={about}
+                onChange={(e)=>{setAbout(e.target.value)}}    
             />
         </div>
+        <Button variant="contained" onClick= {handleSaveUser}> Save </Button>
         </div>
     </div>;
 }
