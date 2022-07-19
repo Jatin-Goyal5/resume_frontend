@@ -1,6 +1,6 @@
 import {  TextField ,Container ,Checkbox,FormControlLabel, Button, Typography} from '@material-ui/core';
 import {React, useContext, useState} from 'react';
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { AuthContext } from '../../context/AuthProvider';
 import './signup.css';
 const Signup = (props) => {
@@ -63,10 +63,6 @@ const Signup = (props) => {
               value={confirmPassword} 
               onChange={(e) => { setConfirmPassword(e.target.value); }} 
             />
-             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -76,8 +72,9 @@ const Signup = (props) => {
             >
               Sign up
             </Button>
+            <Typography>Already have an account yet ? <Link to="/login"> Sign In here</Link></Typography>
+
        </Container>
-      {/* </div> */}
     </>;
 }
 

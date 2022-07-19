@@ -1,6 +1,6 @@
 import {  TextField ,Container ,Checkbox,FormControlLabel, Button, Typography} from '@material-ui/core';
 import {React, useContext, useState} from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
 import './login.css';
 const Login = (props) => {
@@ -21,8 +21,7 @@ const Login = (props) => {
           }
           
           login(email, password).then(()=>{
-            history.push("/dash");
-            history.go("/dash");
+            history.push("/dashboard");
           });
         } catch (err) {
          console.log(err);
@@ -59,11 +58,6 @@ const Login = (props) => {
               value={password} 
               onChange={(e) => { setPassword(e.target.value); }} 
             />
-           
-             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -73,7 +67,9 @@ const Login = (props) => {
             >
               Sign In
             </Button>
+          <Typography>Don't have an account <Link to="/signup"> signup</Link></Typography>
        </Container>
+
       {/* </div> */}
     </>;
 }
