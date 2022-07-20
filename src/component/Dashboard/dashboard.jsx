@@ -55,7 +55,7 @@ useEffect(()=>{
             <List>
                 { item.map((data, index) => {
                     return (<div onClick={()=>{changeSelect(index)}} key={index}>
-                    <ListItem key={index}  button selected= {index== selected? true:false}>
+                    <ListItem key={index}  button selected= {index== selected? true:false} color={index== selected? 'primary':'secondry'}>
                     <ListItemIcon>
                         {data.icon}
                         </ListItemIcon>

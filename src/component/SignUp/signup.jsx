@@ -12,6 +12,13 @@ const Signup = (props) => {
     const history = useHistory();
     const handleSignup = async (e) => {
         try {
+          if(password  != confirmPassword){
+            alert('password not match confirm password');
+            return;
+          }else if(email.includes('@') == false){
+            alert('email must be correct');
+            return;
+          }
           await signUp(email, password);
           history.push("/dashboard");
         } catch (err) {
@@ -34,7 +41,6 @@ const Signup = (props) => {
               value={email} 
               onChange={(e) => { setEmail(e.target.value); }} 
               name="email"
-              autoComplete="email"
               autoFocus
             />
              <TextField
@@ -46,7 +52,6 @@ const Signup = (props) => {
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
               value={password} 
               onChange={(e) => { setPassword(e.target.value); }} 
             />
@@ -59,7 +64,6 @@ const Signup = (props) => {
               label="confirmPassword"
               type="password"
               id="confirmPassword"
-              autoComplete="current-confirmPassword"
               value={confirmPassword} 
               onChange={(e) => { setConfirmPassword(e.target.value); }} 
             />

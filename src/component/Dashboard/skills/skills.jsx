@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Grid,
   IconButton,
   OutlinedInput,
   Paper,
@@ -17,6 +18,7 @@ import { SearchOutlined } from "@material-ui/icons";
 import "./skill.css";
 import { Rating } from "@mui/material";
 import { AuthContext } from "../../../context/AuthProvider";
+import Skill from "./skill";
 
 export default function Skills() {
   const [open, setOpen] = useState(false);
@@ -53,6 +55,9 @@ export default function Skills() {
       console.log(err)
     }
   }
+
+
+  
 
   return (
     <div class="skills">
@@ -130,27 +135,15 @@ export default function Skills() {
           </DialogActions>
         </Dialog>
       </div>
-      <>
+      <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           {  
              item.map((data, index) => {
-                 return (<Paper style={{    width: "50%",
-                  height: "3rem",
-                  display: "flex",
-                  flexDirection:"column",
-                  padding: "2%",
-                  borderRadius: "1rem",
-                  margin: "1%"}} onClick={()=>{}} key={index}>
-                 <Typography key={index}  button>
-                     {data.name}
-                 </Typography>
-                  <Rating
-                    name="simple-controlled"
-                    value={data.rating}
-                    readOnly
-                  />
-             </Paper>);
+                 return (
+                  <Grid item xs={6}>
+                    <Skill skill= {data}></Skill>
+                  </Grid>);
              })}
-      </>
+      </Grid>
     </div>
   );
 }

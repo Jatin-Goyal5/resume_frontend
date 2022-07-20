@@ -15,7 +15,7 @@ const Login = (props) => {
           if(email.length === 0 || email.password === 0){
             alert(`email or password can't be null`);
             return;
-          }else if(email.includes('@gmail.com') === false){
+          }else if(email.includes('@') === false){
             alert(`email should contain @gmail.com`);
               return;
           }
@@ -40,7 +40,6 @@ const Login = (props) => {
               label="Email Address"
               variant="outlined"
               name="email"
-              autoComplete="email"
               autoFocus
               value={email} 
               onChange={(e) => { setEmail(e.target.value); }} 
@@ -54,7 +53,6 @@ const Login = (props) => {
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
               value={password} 
               onChange={(e) => { setPassword(e.target.value); }} 
             />
