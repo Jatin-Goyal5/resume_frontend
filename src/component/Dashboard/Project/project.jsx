@@ -1,24 +1,23 @@
 import { Card, Chip, Paper, TextField, Typography } from '@material-ui/core';
 import React, { Component } from 'react'
 export default function Project({project,index}){
-    return <>
-          <Paper
-                style={{
+    return  <Paper key={index}
+                style={{ 
+                  backgroundColor:"whitesmoke" ,
+                  color: "#00000",
                   width: "80%",
                   display: "flex",
                   flexDirection: "column",
                   padding: "2%",
                   borderRadius: "1rem",
+                  flexWrap:"true",
                   margin: "2%",
                   gap:"1rem"
-                }}
-                onClick={() => {}}
-                key={index}
-              >
-                <Typography key={index} variant="h4">
+                }}>
+                <Typography variant='h4' style={{fontSize:"2rem", fontWeight:"bold" , marginLeft:"2rem"}}>
                   {project.title}
                 </Typography>
-                <Typography key={index} button>
+                <Typography  style={{wordWrap:"break-word"}}>
                   {project.description}
                 </Typography>
                 <div>
@@ -39,5 +38,5 @@ export default function Project({project,index}){
                   })}
                 </div>
               </Paper>
-    </>;
+    ;
 }

@@ -6,9 +6,10 @@ import {
 import "./skill.css";
 import { Rating } from "@mui/material";
 
-export default function Skill({skill}) {
-    return <Paper style={{    
-        backgroundColor: '#fffff' ,
+export default function Skill({skill, index}) {
+  console.log(skill);
+    return <Paper key={index} style={{    
+        backgroundColor:"whitesmoke" ,
         padding: "1rem",
         textAlign: 'center',
         margin:"1rem",

@@ -1,4 +1,4 @@
-import React, {  useContext, useEffect } from "react";
+import React, {  useContext, useEffect ,useState} from "react";
 import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, Input, MenuItem, OutlinedInput, Select, TextField, Typography
 } from "@material-ui/core";
 import AddIcon from "@mui/icons-material/Add";
@@ -8,13 +8,16 @@ import "./project.css";
 import { AuthContext } from "../../../context/AuthProvider";
 import Project from "./project";
 export default function Projects() {
-  const [open, setOpen] = React.useState(false);
-  const [skill, setSkill] = React.useState([]);
-  const [projectname, setProjectname] = React.useState("");
-  const [projectdescription, setProjectdescription] = React.useState("");
-  const { addProject, getProjects, getSkills } = useContext(AuthContext);
-  const [projects, setProjects] = React.useState([]);
-  const [availableSkills , setAvailableskills] = React.useState([]);
+  const [open, setOpen] = useState(false);
+  const [skill, setSkill] = useState([]);
+  const [projectname, setProjectname] = useState("");
+  const [projectdescription, setProjectdescription] = useState("");
+  const { addProject, getDetail } = useContext(AuthContext);
+  const [projects, setProjects] = useState([]);
+  const [availableSkills , setAvailableskills] = useState([]);
+  const [showSearch , setShowsearch] = useState(false);
+  const [searchProject , setSearchProject] = useState('');
+  let [filteredProject,setFilteredProject]=useState([]);
 
   const handleChange = (event) => {
     const {
@@ -25,8 +28,8 @@ export default function Projects() {
 
   useEffect(() => {
     (async()=>{
-      let data = await getProjects();
-      let skillsResponse = await getSkills();
+      let data = await getDetail('project');
+      let skillsResponse = await getDetail('skill');
       skillsResponse = skillsResponse.map((data)=>{
         return data.name;
       })
@@ -41,6 +44,29 @@ export default function Projects() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSearch = (e)=>{
+    setSearchProject(e.target.value);
+    if(e.target.value===""){
+      setShowsearch(false);
+      setFilteredProject([]);
+    }
+    else {
+      setShowsearch(true);
+      filteredProject = projects.filter(
+        (data) => {
+          return data
+            .title
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) 
+           
+        }
+      );
+      setFilteredProject(filteredProject);
+    }
+  }
+
+
   const handleAddProject = async () => {
     try {
       setOpen(false);
@@ -48,11 +74,15 @@ export default function Projects() {
         return;
       }
       await addProject(projectname, projectdescription, skill);
+      let data = await getDetail("project");
+      setProjects(data);
       setProjectname("");
       setProjectdescription("");
       setSkill([]);
     } catch (err) {}
   };
+
+
 
   return (
     <div class="skills">
@@ -60,6 +90,8 @@ export default function Projects() {
         <TextField
           id="standard-bare"
           variant="filled"
+          value={searchProject}
+          onChange={handleSearch}
           placeholder="Search for Project"
           style={{ width: "50%", borderRadius: "5rem" }}
           InputProps={{
@@ -153,10 +185,11 @@ export default function Projects() {
         </Dialog>
       </div>
       <div>
-        {projects &&
-          projects.map((data, index) => {
+        {
+          (showSearch?
+            filteredProject: projects).map((data, index) => {
             return (
-              <Project project={data}></Project>
+              <Project project={data} index={index}></Project>
             );
           })}
       </div>

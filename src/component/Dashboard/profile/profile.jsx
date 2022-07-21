@@ -4,33 +4,59 @@ import { Button, IconButton, OutlinedInput, TextareaAutosize, TextField, Typogra
 import EditIcon from '@mui/icons-material/Edit';
 import './profile.css';
 import { AuthContext } from '../../../context/AuthProvider';
-import { Edit } from '@material-ui/icons';
+import { Edit, SaveOutlined } from '@material-ui/icons';
+import { useEffect } from 'react';
 export default function Profile(){
     const [email , setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [location, setLocation] = useState('');
     const [contact , setContact] = useState('');
     const [about, setAbout] = useState('');
-    const {updateUser} = useContext(AuthContext);
+    const {updateUser, getDetail} = useContext(AuthContext);
+    const [edit,setEdit] = useState(true);
+
+    useEffect(()=>{
+        (async()=>{
+          let response = await getDetail('user');
+          setEmail(response.email);
+          setContact(response.contact);
+          setName(response.name);
+          setLocation(response.location);
+          setAbout(response.about);
+        })()
+    },[]);
+
+
     const handleSaveUser = async ()=>{
         try{
             let obj = {
+                name:name,
+                location: location,
                 email: email,
                 contact: contact,
                 about: about,
             }
-            await updateUser();
+            await updateUser(obj);
         }catch(err){
             console.log(err);
         }
     }
+    const handleEdit= ()=>{
+        setEdit(!edit);
+        console.log(!edit);
+    }
     return <div class="profilee">
         <div className= "profile">
             <Avatar sx={{ width: 100, height: 100 }}>N</Avatar>
-            <div>
-                <Typography>name</Typography>
-                <Typography>location</Typography>
-            </div>
-            <IconButton color="primary" onClick={{}}>
-                <EditIcon></EditIcon>
+            {edit? <div>
+                <Typography>{name}</Typography>
+                <Typography>{location}</Typography>
+            </div>:<div style={{display:"flex", flexDirection:"column"}}>
+                <TextField value={name} onChange={(e)=>setName(e.target.value)}></TextField>
+                <TextField value={location} onChange={(e)=>setLocation(e.target.value)}></TextField>
+                </div>}
+            <IconButton color="primary" onClick={handleEdit}>
+                {edit? <EditIcon></EditIcon>: <SaveOutlined></SaveOutlined>}
             </IconButton>
         </div>
         <div class ="detail">
@@ -47,7 +73,7 @@ export default function Profile(){
               autoComplete="email"
               autoFocus
               value={email} 
-              onChange={(e) => { setEmail(e.target.value); }} 
+              readOnly 
             />
         </div>
         <div>

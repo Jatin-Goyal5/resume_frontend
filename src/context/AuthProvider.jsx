@@ -60,9 +60,11 @@ export function AuthProvider ({children}){
           }
     }
 
-    async function  getSkills(name){
+    
+
+    async function  getDetail(endPoint){
         try{
-            let response = await axios.get("http://localhost:5000/skill",{
+            let response = await axios.get(`http://localhost:5000/${endPoint}`,{
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': currentUser.data.token,
@@ -75,20 +77,23 @@ export function AuthProvider ({children}){
         }
     }
 
-    async function getProjects(){
+    async function updateUser(obj){
         try{
-            let response = await axios.get("http://localhost:5000/project",{
+            
+            let response = await axios.put("http://localhost:5000/user",obj,
+            {
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': currentUser.data.token,
                 }
-            });
+            }
+            )
             console.log(response);
-            return response.data.data;
-        }catch(err){
-            console.log(err);
-        }
+          }catch(err){
+              console.log(err);
+          }
     }
+    
     
     useEffect(()=>{
         console.log(currentUser);
@@ -101,8 +106,8 @@ export function AuthProvider ({children}){
         signUp :signUp,
         addSkill: addSkill,
         addProject: addProject,
-        getSkills: getSkills,
-        getProjects:getProjects,
+        updateUser: updateUser,
+        getDetail: getDetail,
     }
 
     return (<AuthContext.Provider value={values}>

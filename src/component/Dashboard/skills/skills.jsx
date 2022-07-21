@@ -23,41 +23,62 @@ import Skill from "./skill";
 export default function Skills() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(1);
-  const [skillname, setSkillname] =useState('');
-  const {addSkill, getSkills} = useContext(AuthContext);
-  const [item ,setItems]= useState([]);
+  const [skillname, setSkillname] = useState("");
+  const { addSkill, getDetail } = useContext(AuthContext);
+  const [item, setItems] = useState([]);
+  const [showSearch , setShowsearch] = useState(false);
+  const [searchSkill , setSearchSkill] = useState('');
+  let [filteredSkill,setFilteredSkill]=useState([]);
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSearch = (e)=>{
+    setSearchSkill(e.target.value);
+    if(e.target.value===""){
+      setShowsearch(false);
+      setFilteredSkill([]);
+    }
+    else {
+      setShowsearch(true);
+      filteredSkill = item.filter(
+        (data) => {
+          return data
+            .name
+            .toLowerCase()
+            .includes(e.target.value.toLowerCase()) 
+           
+        }
+      );
+      setFilteredSkill(filteredSkill);
+    }
+  }
   
-  useEffect( ()=>{
-    async function skiller(){
-      let data = await getSkills("");
+
+  useEffect(() => {
+    async function skiller() {
+      let data = await getDetail("skill");
       setItems(data);
     }
     skiller();
     // items= data.data;
-  },[]);
+  }, []);
 
-
-  const handleAddSkill= async ()=>{
-    try{
+  const handleAddSkill = async () => {
+    try {
       setOpen(false);
-      await addSkill(skillname,value);
-      let data = await getSkills("");
+      await addSkill(skillname, value);
+      let data = await getDetail("skill");
       setItems(data);
-      setSkillname('');
+      setSkillname("");
       setValue(1);
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
-  }
-
-
-  
+  };
 
   return (
     <div class="skills">
@@ -66,7 +87,9 @@ export default function Skills() {
           id="standard-bare"
           variant="filled"
           placeholder="Search for Skill"
-          style={{width:"50%"}}
+          value ={searchSkill}
+          onChange={handleSearch}
+          style={{ width: "50%" }}
           InputProps={{
             endAdornment: (
               <IconButton>
@@ -83,66 +106,73 @@ export default function Skills() {
         >
           Add Skill
         </Button>
-        <Dialog
-          fullWidth
-          onClose={handleClose}
-          open={open}
-        >
-          <DialogTitle >
+        <Dialog fullWidth onClose={handleClose} open={open}>
+          <DialogTitle>
             ADD SKILL
             <IconButton
               aria-label="close"
               onClick={handleClose}
               style={{
                 position: "absolute",
-                marginLeft:"25rem"
+                marginLeft: "25rem",
               }}
             >
               <CloseIcon />
             </IconButton>
           </DialogTitle>
           <DialogContent dividers>
-          <div style={{display:"flex",flexDirection:"column" , color:"red", gap:"1rem", fontWeight:"bold"}}>
-              <Typography variant='h6'>Skill</Typography>
-                    <OutlinedInput 
-                    style={{borderRadius:"0rem 2rem 2rem 2rem"}} 
-                    placeholder="Enter your skill" 
-                          margin="normal"
-                          required
-                          fullWidth
-                          id="email"
-                          name="email"
-                          autoComplete="email"
-                          autoFocus
-                          value={skillname} 
-                          onChange={(e) => {setSkillname(e.target.value) }} 
-                        />
-                        <Typography >How Would you like to rate yourself?</Typography>
-                        <Rating
-                            name="simple-controlled"
-                            value={value}
-                            onChange={(event, newValue) => {
-                                setValue(newValue);
-                            }}
-                        />
-                      
-                </div>
-            </DialogContent>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                color: "red",
+                gap: "1rem",
+                fontWeight: "bold",
+              }}
+            >
+              <Typography variant="h6">Skill</Typography>
+              <OutlinedInput
+                style={{ borderRadius: "0rem 2rem 2rem 2rem" }}
+                placeholder="Enter your skill"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={skillname}
+                onChange={(e) => {
+                  setSkillname(e.target.value);
+                }}
+              />
+              <Typography>How Would you like to rate yourself?</Typography>
+              <Rating
+                name="simple-controlled"
+                value={value}
+                onChange={(event, newValue) => {
+                  setValue(newValue);
+                }}
+              />
+            </div>
+          </DialogContent>
           <DialogActions>
-            <Button autoFocus onClick={handleAddSkill} variant= "contained">
+            <Button autoFocus onClick={handleAddSkill} variant="contained">
               Save changes
             </Button>
           </DialogActions>
         </Dialog>
       </div>
       <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          {  
-             item.map((data, index) => {
-                 return (
-                  <Grid item xs={6}>
-                    <Skill skill= {data}></Skill>
-                  </Grid>);
-             })}
+        {
+          (showSearch?
+            filteredSkill:item).map((data, index) => {
+          return (
+            <Grid item xs={6}>
+              <Skill skill={data} index={index}></Skill>
+            </Grid>
+          );
+        })}
       </Grid>
     </div>
   );
